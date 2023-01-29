@@ -192,7 +192,7 @@ export default function AddBook() {
                             value={edit?.quantity?.toString()}
                             keyboardType='numeric'
                             onChangeText={(e) => setEdit({ ...edit, quantity: parseInt(e) })}
-                            placeholder="Enter Book Price"
+                            placeholder="Enter quantity"
                             style={{
                                 height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
                             }}
@@ -210,7 +210,7 @@ export default function AddBook() {
                             Description
                         </Text>
                         <TextInput
-                            placeholder="Enter Book Price"
+                            placeholder="Enter Description"
                             value={edit.description}
                             multiline
 
@@ -231,7 +231,7 @@ export default function AddBook() {
                             Edition *
                         </Text>
                         <TextInput
-                            placeholder="Enter Book Price"
+                            placeholder="Enter Edition"
                             value={edit?.edition?.toString()}
                             onChangeText={(e) => setEdit({ ...edit, edition: parseFloat(e) })}
                             style={{
@@ -310,7 +310,7 @@ export default function AddBook() {
                             Auther Name *
                         </Text>
                         <TextInput
-                            placeholder="Enter Book Price"
+                            placeholder="Enter auther name"
                             value={edit.authorName}
                             onChangeText={(e) => setEdit({ ...edit, authorName: e })}
                             style={{
@@ -329,7 +329,7 @@ export default function AddBook() {
                             Tags *(Comma Separated)
                         </Text>
                         <TextInput
-                            placeholder="Enter Book Price"
+                            placeholder="Enter tags"
                             value={edit.tags}
                             onChangeText={(e) => setEdit({ ...edit, tags: e.split(",") })}
                             style={{

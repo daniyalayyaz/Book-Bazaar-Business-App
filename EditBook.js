@@ -136,6 +136,66 @@ const [edit,setEdit]=React.useState(route.params.val);
                             height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
                         }}
                     ></TextInput>
+                    <Text
+                            style={{
+                                fontSize: 16,
+                                fontWeight: "bold",
+                                color: "black",
+                                paddingBottom: 10,
+                                marginTop: 10,
+                            }}
+                        >
+                            Condition *
+                        </Text>
+                        <Picker
+                            selectedValue={edit.category}
+                            style={{
+                                height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                            }}
+                            onValueChange={(itemValue, itemIndex) => setEdit({ ...edit, category: itemValue })}
+                        >
+                            <Picker.Item label="New" value="New" />
+                            <Picker.Item label="Old" value="Old" />
+                        </Picker>
+
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                fontWeight: "bold",
+                                color: "black",
+                                paddingBottom: 10,
+                                marginTop: 10,
+                            }}
+                        >
+                            Category *
+                        </Text>
+                        <Picker
+                            selectedValue={edit.condition}
+                            style={{
+                                height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                            }}
+
+
+                            onValueChange={(itemValue, itemIndex) => setEdit({ ...edit, condition: itemValue })}
+                        >
+
+                            <Picker.Item value="School Books" label="School Books" />
+                            <Picker.Item value="Medical Books" label="Medical Books" />
+
+
+                            <Picker.Item value="Accounting and Financial Books" label="Accounting and Financial Books" />
+
+
+                            <Picker.Item value="Dictionaries" lable="Dictionaries" />
+                            <Picker.Item value="Novels" label="Novels" />
+                            <Picker.Item value="General Knowledge"
+                                label="General Knowledge" />
+
+                            <Picker.Item value="Biographies" label="Biographies" />
+                            <Picker.Item value="Argumentatives" lable="Argumentatives" />
+                            <Picker.Item value="Others" label="Others" />
+
+                        </Picker>
                       <Text
                         style={{
                             fontSize: 16,
@@ -147,8 +207,9 @@ const [edit,setEdit]=React.useState(route.params.val);
                     >
                         isbn Number *
                     </Text>
+
                     <TextInput
-                        placeholder="Enter Book Price"
+                        placeholder="Enter isbn"
                         value={edit.isbn.toString()}
                         onChangeText={(e)=>setEdit({...edit,isbn:e})}
                         style={{
