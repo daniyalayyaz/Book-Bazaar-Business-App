@@ -1,6 +1,6 @@
 import { Button, Card, Avatar, List } from 'react-native-paper';
 import { Text, View, Dimensions, SafeAreaView, ScrollView, Platform, Image, ImageBackground, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import productService from './Services/services/ProductsServices';
 
@@ -10,6 +10,7 @@ export default function ApproveOrders() {
     const navigation = useNavigation();
     const [order, setOrders] = React.useState([]);
     const [update,setUpdate]=React.useState(false);
+    const isFocused = useIsFocused();
     const RedirectToCart = () => {
         navigation.navigate("Cart");
     };
@@ -49,7 +50,7 @@ export default function ApproveOrders() {
         booking();
         setUpdate(false);
 
-    }, [update])
+    }, [update,isFocused])
     const approveOrder=(id)=>{
         productService.completeOrder(id).then((val) => {
             setUpdate(true);

@@ -1,17 +1,19 @@
 import { Button, Card, IconButton, Searchbar } from 'react-native-paper';
-import { Text, View, Dimensions, SafeAreaView, FlatList, TouchableOpacity, Image, Platform, ImageBackground } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Text, View, Dimensions, SafeAreaView, FlatList, TouchableOpacity, Image, Platform, ImageBackground, Alert } from 'react-native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import axios from "axios";
 import productService from './Services/services/ProductsServices';
 
-export default function Home() {
+export default function Home({route}) {
     const [category, setcategory] = React.useState([]);
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
     const [searchQuery, setSearchQuery] = React.useState('');
     const onChangeSearch = query => setSearchQuery(query);
     const [update,setUpdate]=React.useState(false);
+    const isFocused = useIsFocused();
+  
     const DATA = [
 
 
@@ -36,8 +38,10 @@ export default function Home() {
     ];
     React.useEffect(() => {
         booking();
-      }, [update]);
+        store();
+      }, [update,isFocused]);
       const [stores,setStores]=React.useState([]);
+      const [check,setCheck]=React.useState("");
       const [ori,setOriginal]=React.useState([]);
       const booking = async () => {
         // const user = await AsyncStorage.getItem("user");
@@ -52,7 +56,17 @@ export default function Home() {
         });
       };
       
+      const store = async () => {
+   
+        productService.checkStore().then((val) => {
+            console.log(val?.store?.isApproved)
+ setCheck(val?.store?.isApproved);
 
+        }).catch((e)=>{
+          console.log(e)
+        });
+      };
+      
 
     const navigation = useNavigation();
 
@@ -60,10 +74,15 @@ export default function Home() {
         navigation.navigate('DetailPage',{val:val,setUpdate})
     }
     const RedirectToCart = () => {
-        navigation.navigate('Cart')
+        navigation.navigate('Login')
     }
     const RedirectToProfile = () => {
-        navigation.navigate('AddBook')
+        if(!check){
+     Alert.alert("You need to add a store first")
+        }
+        else{
+            navigation.navigate('AddBook')
+        }
     }
 
     const search=(e)=>{

@@ -108,9 +108,7 @@ export default function Clientlogin() {
                                     Login
                                 </Button>
                             </View>
-                            <Text style={{ textAlign: "center", marginBottom: 10 }}>
-                                Don't have an account?
-                            </Text>
+                       
                        
                         </ScrollView>
                     </Card>

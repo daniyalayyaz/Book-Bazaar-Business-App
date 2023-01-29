@@ -12,7 +12,7 @@ import {
   SafeAreaView,
   Alert
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 
 import React, { useState } from 'react';
@@ -33,10 +33,15 @@ export default function ClientSignup() {
   var width = Dimensions.get('window').width;
   var height = Dimensions.get('window').height;
   const navigation = useNavigation();
+  const [check, setcheck] = React.useState({});
+  const isFocused = useIsFocused();
+
   const RedirectToLogin = () => {
     navigation.navigate("Login");
   };
-
+  React.useEffect(() => {
+    store();
+  }, [isFocused])
   const addStore = () => {
     productService.AddStore({
       storeName,
@@ -74,8 +79,30 @@ export default function ClientSignup() {
     if (!result.canceled) {
       console.log(result);
       setImage(result.uri);
-      setEdit({...edit,image:result.uri})
+      setEdit({ ...edit, image: result.uri })
     }
+  };
+  const store = async () => {
+
+    productService.checkStore().then((val) => {
+
+      setcheck(val?.store.isApproved);
+      if (val?.store) {
+        const { address, email, contact, ownerName, location, storeType, storeName } = val.store;
+
+        setAddress(address);
+        setEmail(email);
+        setContact(contact);
+        setOwnerName(ownerName);
+        setLocation(location);
+        setStoreType(storeType);
+        setStoreName(storeName);
+
+      }
+
+    }).catch((e) => {
+      console.log(e)
+    });
   };
   return (
     <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
@@ -115,7 +142,7 @@ export default function ClientSignup() {
                   fontSize: 20,
                 }}
               >
-                Create an Business
+                {!check ? 'Create an Business' : 'You already have a business registered'}
               </Text>
               <View>
                 <TextInput
@@ -143,7 +170,7 @@ export default function ClientSignup() {
                   onChangeText={(e) => { setAddress(e) }}
                 ></TextInput>
                 <TextInput
-                  placeholder="Password"
+                  placeholder="Owner Name"
                   style={styles.Textfields}
                   value={ownerName}
                   onChangeText={(e) => { setOwnerName(e) }}
@@ -161,24 +188,24 @@ export default function ClientSignup() {
 
                   <Picker.Item value="Book" label="Book" />
                   <Picker.Item value="Printing Press" label="Printing Press" />
-           
+
                 </Picker>
                 <TextInput
-                  placeholder="Confirm Password"
+                  placeholder="Location"
                   style={styles.Textfields}
                   value={location}
                   onChangeText={(e) => { setLocation(e) }}
                 ></TextInput>
-                <Button onPress={pickImage} >   Pick an image
-                            </Button>
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-                <Button
+                {!check && <Button onPress={pickImage} >   Pick an image
+                </Button>}
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                {!check && <Button
                   style={{ marginBottom: 20, backgroundColor: "#E1B107" }}
                   mode="contained"
                   onPress={() => addStore()}
                 >
                   Add Store
-                </Button>
+                </Button>}
 
               </View>
             </ScrollView>

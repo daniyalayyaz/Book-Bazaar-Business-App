@@ -27,21 +27,21 @@ export default function AddBook() {
     const [image, setImage] = useState(null);
 
     const pickImage = async () => {
-      // No permissions request is necessary for launching the image library
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-  
-      console.log(result);
-  
-      if (!result.canceled) {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
         console.log(result);
-        setImage(result.uri);
-        setEdit({...edit,image:result.uri})
-      }
+
+        if (!result.canceled) {
+            console.log(result);
+            setImage(result.uri);
+            setEdit({ ...edit, image: result.uri })
+        }
     };
     const [edit, setEdit] = React.useState({});
     const onChange = (event, selectedDate) => {
@@ -78,7 +78,7 @@ export default function AddBook() {
     const editBook = () => {
         productService.AddProduct(edit).then((val) => {
             Alert.alert("Book is Add");
-console.log(val)
+            console.log(val)
             navigation.navigate("Stores");
 
 
@@ -337,9 +337,9 @@ console.log(val)
                             }}
                         ></TextInput>
 
-<Button onPress={pickImage} >   Pick an image
-                            </Button>
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                        <Button onPress={pickImage} >   Pick an image
+                        </Button>
+                        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
                         <View style={{ margin: 10 }}>
                             <Button icon="pencil" mode="contained" style={{ backgroundColor: "#E1B107" }} onPress={editBook}>

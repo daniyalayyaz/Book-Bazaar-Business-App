@@ -58,6 +58,9 @@ class ProductsServices extends GenericServices {
   AddProduct=(data)=>{
     return this.posto("/seller/create-product" ,data);
   }
+  checkStore=()=>{
+    return this.geto("/seller/get-store");
+  }
 }
 let productService = new ProductsServices();
 export default productService;
