@@ -12,6 +12,7 @@ import pendingorders from "./pendingorders";
 import CompleteOrders from "./CompleteOrders";
 import Pendingorders from "./pendingorders";
 import EditStore from "./EditStore";
+import ApproveOrders from "./approveorders";
 
 const Stack = createNativeStackNavigator();
 
@@ -107,9 +108,12 @@ export function StackScreen() {
             iconName = focused ? "checkmark-done" : "checkmark-done-outline";
           } else if (route.name === "Pending") {
             iconName = focused ? "list" : "list-outline";
-          } else if (route.name === "Profile") {
+          } else if (route.name === "Approve") {
             iconName = focused ? "person" : "person-outline";
+          }else if (route.name === "Add Store") {
+            iconName = focused ? "list" : "list-outline";
           }
+
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -125,16 +129,22 @@ export function StackScreen() {
         options={{ header: () => null }}
         component={pendingorders}
       />
+        <Tab.Screen
+        name="Approve"
+        options={{ header: () => null }}
+        component={ApproveOrders}
+      />
+             <Tab.Screen
+        name="Add Store"
+        options={{ header: () => null }}
+        component={Signup}
+      />
       <Tab.Screen
         name="Completed"
         options={{ header: () => null }}
         component={CompleteOrders}
       />
-      <Tab.Screen
-        name="Profile"
-        options={{ header: () => null }}
-        component={EditStore}
-      />
+    
     </Tab.Navigator>
   );
 }

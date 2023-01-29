@@ -10,23 +10,38 @@ import {
     Dimensions,
     Platform,
     SafeAreaView,
-    AsyncStorage
+    Alert
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import UerServices from "./Services/services/UserServices";
 
 
 export default function Clientlogin() {
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
     const navigation = useNavigation();
-    const [email, setemail] = useState('');
-    const [password, setpassword] = useState('');
+    const moves = () => {
 
-    const RedirectToRegister = () => {
-        navigation.navigate("Register");
+      UerServices.login(email,password).then(async(val)=>{
+      
+ 
+        await AsyncStorage.setItem("user", val.token);
+      navigation.navigate("Stores");
+    }).catch((val)=>{
+       Alert.alert(val.errors[0].msg);
+      })
     };
+    const move = () => {
+      navigation.navigate("Signup");
+    };
+
+    const [email, setemail] = useState('PrinceBookDepot@gmail.com');
+    const [password, setpassword] = useState('abc123');
+
     const RedirectToHome = () => {
         navigation.navigate("Stores");
     };
@@ -88,7 +103,7 @@ export default function Clientlogin() {
                                 <Button
                                     style={{ marginBottom: 20, backgroundColor: "#E1B107" }}
                                     mode="contained"
-                                    onPress={() => RedirectToHome()}
+                                    onPress={() => moves()}
                                 >
                                     Login
                                 </Button>
@@ -96,9 +111,7 @@ export default function Clientlogin() {
                             <Text style={{ textAlign: "center", marginBottom: 10 }}>
                                 Don't have an account?
                             </Text>
-                            <Button color="grey" onPress={() => RedirectToRegister()}>
-                                Sign Up
-                            </Button>
+                       
                         </ScrollView>
                     </Card>
                 </View>

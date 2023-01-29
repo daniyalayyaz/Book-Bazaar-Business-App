@@ -9,18 +9,27 @@ import {
   ScrollView,
   Dimensions,
   Platform,
-  SafeAreaView
+  SafeAreaView,
+  Alert
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from 'expo-image-picker';
+
 import React, { useState } from 'react';
 import axios from "axios";
+import { Picker } from "@react-native-picker/picker";
+import productService from "./Services/services/ProductsServices";
 
 export default function ClientSignup() {
-  const [name, setname] = useState('');
-  const [email, setemail] = useState('');
-  const [number, setnumber] = useState('');
-  const [password, setpassword] = useState('');
-  const [cpassword, setcpassword] = useState('');
+  const [storeName, setStoreName] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [storeType, setStoreType] = useState("book");
+  const [address, setAddress] = useState("");
+  const [location, setLocation] = useState("");
+  const [image, setImage] = useState("");
+  const [isCustomer, setIsCustomer] = useState("Yes");
   var width = Dimensions.get('window').width;
   var height = Dimensions.get('window').height;
   const navigation = useNavigation();
@@ -28,7 +37,46 @@ export default function ClientSignup() {
     navigation.navigate("Login");
   };
 
+  const addStore = () => {
+    productService.AddStore({
+      storeName,
+      ownerName,
+      contact,
+      email,
+      storeType,
+      address,
+      location,
+      image,
+      isCustomer,
+    }).then((val) => {
+      Alert.alert("Store is Add");
 
+      navigation.navigate("Stores");
+
+
+    }).catch((e) => {
+      console.log(e.errors[0].msg);
+      Alert.alert(e.errors[0].msg);
+
+    })
+  }
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      console.log(result);
+      setImage(result.uri);
+      setEdit({...edit,image:result.uri})
+    }
+  };
   return (
     <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
       <ImageBackground
@@ -67,57 +115,71 @@ export default function ClientSignup() {
                   fontSize: 20,
                 }}
               >
-                Create an Business Account
+                Create an Business
               </Text>
               <View>
                 <TextInput
                   placeholder="Business Name"
                   style={styles.Textfields}
-                  value={name}
-                  onChangeText={(e) => { setname(e) }}
+                  value={storeName}
+                  onChangeText={(e) => { setStoreName(e) }}
                 ></TextInput>
                 <TextInput
                   placeholder="Business Email"
                   style={styles.Textfields}
                   value={email}
-                  onChangeText={(e) => { setemail(e) }}
+                  onChangeText={(e) => { setEmail(e) }}
                 ></TextInput>
                 <TextInput
                   placeholder="Business Phone"
                   style={styles.Textfields}
-                  value={number}
-                  onChangeText={(e) => { setnumber(e) }}
+                  value={contact}
+                  onChangeText={(e) => { setContact(e) }}
                 ></TextInput>
                 <TextInput
                   placeholder="Business Address"
                   style={styles.Textfields}
-
+                  value={address}
+                  onChangeText={(e) => { setAddress(e) }}
                 ></TextInput>
                 <TextInput
                   placeholder="Password"
                   style={styles.Textfields}
-                  value={password}
-                  onChangeText={(e) => { setpassword(e) }}
+                  value={ownerName}
+                  onChangeText={(e) => { setOwnerName(e) }}
                 ></TextInput>
+                <Picker
+                  selectedValue={storeType}
+                  style={{
+                    height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                  }}
+
+
+                  onValueChange={(itemValue, itemIndex) => setStoreType(itemValue)}
+                >
+
+
+                  <Picker.Item value="Book" label="Book" />
+                  <Picker.Item value="Printing Press" label="Printing Press" />
+           
+                </Picker>
                 <TextInput
                   placeholder="Confirm Password"
                   style={styles.Textfields}
-                  value={cpassword}
-                  onChangeText={(e) => { setcpassword(e) }}
+                  value={location}
+                  onChangeText={(e) => { setLocation(e) }}
                 ></TextInput>
+                <Button onPress={pickImage} >   Pick an image
+                            </Button>
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
                 <Button
                   style={{ marginBottom: 20, backgroundColor: "#E1B107" }}
                   mode="contained"
-                  onPress={() => Register()}
+                  onPress={() => addStore()}
                 >
-                  Signup
+                  Add Store
                 </Button>
-                <Text style={{ textAlign: 'center', marginBottom: 10 }}>
-                  Already have an account?
-                </Text>
-                <Button color="grey" onPress={() => RedirectToLogin()}>
-                  Login
-                </Button>
+
               </View>
             </ScrollView>
           </Card>

@@ -17,6 +17,22 @@ class ProductsServices extends GenericServices {
   getProducts = (id) => {
     return this.get("/product/get-products/"+id);
   };
+  getProducts = (id) => {
+    return this.get("/product/get-products/"+id);
+  };
+  getSellerProducts = () => {
+    return this.geto("/seller/get-products");
+  };
+  deleteSellerProduct = (id) => {
+    return this.deleteo("seller/delete-product/"+id);
+  };
+  updateSellerProduct = (id,data) => {
+    return this.updateo("seller/edit-product/"+id,data);
+  };
+  getOrdersSel = (data) => {
+    return this.geto("/order/get-orders/"+data);
+  };
+
   deleteProduct = (_id) => {
     return this.delete("products/" + _id);
   };
@@ -26,6 +42,22 @@ class ProductsServices extends GenericServices {
   getSingle = (_id) => {
     return this.get("products/" + _id);
   };
+
+  approveOrder=(id)=>{
+    return this.updateo("order/approve-order/" + id,{});
+  }
+  cancelOrder=(data)=>{
+    return this.updateo("order/cancel-order/" + data.id,{ id: data.id, qty: data.qty, productId: data.productId });
+  }
+  completeOrder=(id)=>{
+    return this.updateo("/order/complete-order/" + id,{});
+  }
+  AddStore=(data)=>{
+    return this.posto("/seller/create-store" ,data);
+  }
+  AddProduct=(data)=>{
+    return this.posto("/seller/create-product" ,data);
+  }
 }
 let productService = new ProductsServices();
 export default productService;

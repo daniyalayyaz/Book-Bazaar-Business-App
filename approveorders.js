@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import productService from './Services/services/ProductsServices';
 
-export default function Completeorders() {
+export default function ApproveOrders() {
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
     const navigation = useNavigation();
@@ -36,7 +36,7 @@ export default function Completeorders() {
     const booking = async () => {
         // const user = await AsyncStorage.getItem("user");
         // const userInfo = JSON.parse(user);
-        productService.getOrdersSel("complete").then((val) => {
+        productService.getOrdersSel("approved").then((val) => {
             console.log(val, 2);
 
             setOrders(val.orders);
@@ -51,10 +51,10 @@ export default function Completeorders() {
 
     }, [update])
     const approveOrder=(id)=>{
-        productService.approveOrder(id).then((val) => {
+        productService.completeOrder(id).then((val) => {
             setUpdate(true);
 
-            Alert.alert("order is Approved");
+            Alert.alert("order is Completed");
     
     
         }).catch((e)=>{
@@ -84,7 +84,7 @@ export default function Completeorders() {
                 style={{ height: height, width: width }}
             >
                 <View style={{ display: 'flex', flexDirection: 'column', height: height, justifyContent: 'space-between', overflow: 'hidden' }}>
-                    <Text style={{ marginTop: 50, marginLeft: 20, marginRight: 20, fontSize: 20, fontWeight: 'bold', color: 'black' }}>Complete Orders</Text>
+                    <Text style={{ marginTop: 50, marginLeft: 20, marginRight: 20, fontSize: 20, fontWeight: 'bold', color: 'black' }}>Approve Orders</Text>
                     <ScrollView style={{marginBottom:40}}>
                         {order.map((idx, index) => (
                             <Card style={{
@@ -99,12 +99,33 @@ export default function Completeorders() {
                                     left={props => <Image source={{ uri: `http://192.168.100.18:5000${idx.orderItems[0].image}` }} {...props} style={{ height: 48, width: 48, borderRadius: 10 }}></Image>}
                                     description={props => <Text {...props} style={{ fontSize: 14, fontWeight: 'bold', color: 'grey' }}>{idx.orderItems[0].price}</Text>}
                                 />
-                          
+                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
+                                    <Button
+                                        style={{ backgroundColor: "#E1B107", width: width / 2.5, fontSize: 8 }}
+                                        mode="contained"
+                                        onPress={() => approveOrder(idx._id)}
+                                    >
+                                        Complete</Button>
+
+                                        <Button
+                                        style={{ backgroundColor: "#E1B107", marginTop: 10, width: width / 2.5, fontSize: 8 }}
+                                        mode="contained"
+                                        onPress={() =>
+                                            handleCancel({
+                                              id: idx._id,
+                                              qty: idx.orderItems[0].qty,
+                                              productId: idx.orderItems[0].productId,
+                                            })
+                                          }
+                                    >
+                                        Cancel</Button>         
+                                </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
 
 
-                                 
+                                
 
                                 </View>
                             </Card>

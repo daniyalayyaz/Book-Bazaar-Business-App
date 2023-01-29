@@ -6,25 +6,28 @@ import {
     ScrollView,
     TextInput,
     Platform,
-    ImageBackground
+    ImageBackground,
+    Alert
 } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import React, { useState, useCallback } from 'react';
 import { Button } from "react-native-paper";
 import DocumentPicker from 'react-native-document-picker';
+import productService from "./Services/services/ProductsServices";
+import { useNavigation } from "@react-navigation/native";
 
 var width = Dimensions.get("window").width;
 var height = Dimensions.get("window").height;
 
-export default function EditBook() {
+export default function EditBook({route}) {
     const [fileResponse, setFileResponse] = useState([]);
     const [date, setDate] = useState(new Date(1598051730000));
-
+const [edit,setEdit]=React.useState(route.params.val);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setDate(currentDate);
     };
-
+    const navigation = useNavigation();
     const showMode = (currentMode) => {
         DateTimePickerAndroid.open({
             value: date,
@@ -51,7 +54,19 @@ export default function EditBook() {
             console.warn(err);
         }
     }, []);
-
+    const editBook=()=>{
+        productService.updateSellerProduct(route.params.val._id,edit).then((val) => {
+        Alert.alert("Book is update");
+        route.params.setUpdate(true);
+        navigation.navigate("Stores");
+    
+    
+        }).catch((e)=>{
+            console.log(e);
+            Alert.alert("Book is not updated");
+     
+        })
+    }
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
                         <ImageBackground
@@ -96,6 +111,8 @@ export default function EditBook() {
                     </Text>
                     <TextInput
                         placeholder="Enter Book Name"
+                        value={edit.bookName}
+                        onChangeText={(e)=>setEdit({...edit,bookName:e})}
                         style={{
                             height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
                         }}
@@ -113,18 +130,119 @@ export default function EditBook() {
                     </Text>
                     <TextInput
                         placeholder="Enter Book Price"
+                        value={edit.price.toString()}
+                        onChangeText={(e)=>setEdit({...edit,price:parseInt(e)})}
                         style={{
                             height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
                         }}
                     ></TextInput>
-                    <Button
-                        style={{ marginTop: 10 }}
-                        onPress={handleDocumentSelection}
+                      <Text
+                        style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "black",
+                            paddingBottom: 10,
+                            marginTop: 10,
+                        }}
                     >
-                        Change Cover Image 📑
-                    </Button>
+                        isbn Number *
+                    </Text>
+                    <TextInput
+                        placeholder="Enter Book Price"
+                        value={edit.isbn.toString()}
+                        onChangeText={(e)=>setEdit({...edit,isbn:e})}
+                        style={{
+                            height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                        }}
+                    ></TextInput>
+
+<Text
+                        style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "black",
+                            paddingBottom: 10,
+                            marginTop: 10,
+                        }}
+                    >
+                      Quantity
+                    </Text>
+                    <TextInput
+                         value={edit.quantity.toString()}
+                         keyboardType='numeric'
+                         onChangeText={(e)=>setEdit({...edit,quantity:parseInt(e)})}
+                        placeholder="Enter Book Price"
+                        style={{
+                            height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                        }}
+                    ></TextInput>
+
+<Text
+                        style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "black",
+                            paddingBottom: 10,
+                            marginTop: 10,
+                        }}
+                    >
+              Description
+                    </Text>
+                    <TextInput
+                        placeholder="Enter Book Price"
+                        value={edit.description}
+                        multiline
+                 
+                        onChangeText={(e)=>setEdit({...edit,description:e})}
+                        style={{
+                            height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                        }}
+                    ></TextInput>
+        <Text
+                        style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "black",
+                            paddingBottom: 10,
+                            marginTop: 10,
+                        }}
+                    >
+                        Edition *
+                    </Text>
+                    <TextInput
+                        placeholder="Enter Book Price"
+                        value={edit.edition.toString()}
+                        onChangeText={(e)=>setEdit({...edit,edition:parseFloat(e)})}
+                        style={{
+                            height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                        }}
+                    ></TextInput>
+
+              <Text
+                        style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "black",
+                            paddingBottom: 10,
+                            marginTop: 10,
+                        }}
+                    >
+                        Auther Name *
+                    </Text>
+                    <TextInput
+                        placeholder="Enter Book Price"
+                        value={edit.authorName}
+                        onChangeText={(e)=>setEdit({...edit,authorName:e})}
+                        style={{
+                            height: 50, width: width * 0.9, backgroundColor: '#e6e6e6', padding: 10
+                        }}
+                    ></TextInput>
+
+                    
+
+
                     <View style={{ margin: 10 }}>
-                        <Button icon="pencil" mode="contained" style={{ backgroundColor: "#E1B107" }}>
+                        <Button icon="pencil" mode="contained" style={{ backgroundColor: "#E1B107" }} onPress={editBook}>
                             EDIT BOOK
                         </Button>
                     </View>

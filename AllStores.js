@@ -3,6 +3,7 @@ import { Text, View, Dimensions, SafeAreaView, FlatList, TouchableOpacity, Image
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import axios from "axios";
+import productService from './Services/services/ProductsServices';
 
 export default function Home() {
     const [category, setcategory] = React.useState([]);
@@ -10,6 +11,7 @@ export default function Home() {
     var height = Dimensions.get('window').height;
     const [searchQuery, setSearchQuery] = React.useState('');
     const onChangeSearch = query => setSearchQuery(query);
+    const [update,setUpdate]=React.useState(false);
     const DATA = [
 
 
@@ -32,13 +34,30 @@ export default function Home() {
         },
 
     ];
-
+    React.useEffect(() => {
+        booking();
+      }, [update]);
+      const [stores,setStores]=React.useState([]);
+      const [ori,setOriginal]=React.useState([]);
+      const booking = async () => {
+        // const user = await AsyncStorage.getItem("user");
+        // const userInfo = JSON.parse(user);
+        productService.getSellerProducts().then((val) => {
+         console.log(val);
+         
+          setStores(val.products);
+          setOriginal(val.products);
+        }).catch((e)=>{
+          console.log(e)
+        });
+      };
+      
 
 
     const navigation = useNavigation();
 
-    const RedirectToDetailPage = () => {
-        navigation.navigate('DetailPage')
+    const RedirectToDetailPage = (val) => {
+        navigation.navigate('DetailPage',{val:val,setUpdate})
     }
     const RedirectToCart = () => {
         navigation.navigate('Cart')
@@ -47,7 +66,9 @@ export default function Home() {
         navigation.navigate('AddBook')
     }
 
-
+    const search=(e)=>{
+        setStores(ori.filter((val)=>val.bookName.toLowerCase().includes(e.toLowerCase())));
+      }
     return (
         <SafeAreaView style={{ paddingTop: Platform.OS === 'android' ? 40 : 0 }}>
             <ImageBackground
@@ -83,42 +104,27 @@ export default function Home() {
                     <View style={{ padding: 20 }}>
                         <Searchbar
                             placeholder="Search"
-                            onChangeText={onChangeSearch}
-                            value={searchQuery}
+                            onChangeText={search}
+                          
                         />
                     </View>
                     <View>
                         <Text style={{ fontWeight: 'bold', fontSize: 22, color: 'black', marginLeft: 20 }}>Your Books</Text>
                     </View>
                     <View>
-                        <FlatList
-                            data={category}
-                            horizontal
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity key={item.key} onPress={() => setcategoryId(item.ID)}>
-                                    <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: 10, backgroundColor: '#E1B107', padding: 20, borderRadius: 12 }}>
-                                        {/* <IconButton
-                                        icon={item.icon}
-                                        iconColor='orange'
-                                        size={20}
-                                    /> */}
-                                        <Text>{item.Name}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            )}
-                        />
+                   
                     </View>
                     <View style={{ flex: 1, marginBottom: 60 }}>
                         <FlatList
                             // data={currenttab}
-                            data={DATA}
+                            data={stores}
                             numColumns={2}
                             renderItem={({ item, index }) => (
-                                <TouchableOpacity onPress={RedirectToDetailPage}>
+                                <TouchableOpacity onPress={()=>RedirectToDetailPage(item)}>
                                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', margin: 10, backgroundColor: '#E1B107', padding: 20, borderRadius: 12 }}>
-                                        <Image source={{ uri: DATA[index]['img'] }} style={{ height: height / 5, width: width / 3, borderRadius: 10 }} />
-                                        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'black' }}>{DATA[index]['title']}</Text>
-                                        <Text>{DATA[index]['price']}</Text>
+                                        <Image  source={{ uri: `http://192.168.100.18:5000${item.image}` }} style={{ height: height / 5, width: width / 3, borderRadius: 10 }} />
+                                        <Text style={{ fontWeight: 'bold', width:width/3,textAlign:"center", fontSize: 8, color: 'black' }}>      {item.bookName}</Text>
+                                        <Text>  {item.price}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )}
