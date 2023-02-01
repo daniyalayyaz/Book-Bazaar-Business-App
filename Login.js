@@ -71,10 +71,10 @@ export default function Clientlogin() {
                                 alignItems: 'center',
                                 justifyContent: 'center'
                             }}>
-                                <Image
+                                {/* <Image
                                     style={{ height: 100, width: 100, marginBottom: 20 }}
                                     source={{ uri: 'https://cdni.iconscout.com/illustration/premium/thumb/book-shopping-store-5669296-4728239.png' }}
-                                />
+                                /> */}
                             </View>
                             <Text
                                 style={{

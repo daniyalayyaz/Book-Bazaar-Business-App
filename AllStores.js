@@ -98,10 +98,10 @@ export default function Home({route}) {
             >
                 <View style={{ display: 'flex', flexDirection: 'column', height: height, overflow: 'hidden' }}>
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 20, marginRight: 20, marginBottom: 10, marginTop: 50 }}>
-                        <Image
+                        {/* <Image
                             style={{ height: 50, width: 50 }}
                             source={{ uri: 'https://cdni.iconscout.com/illustration/premium/thumb/book-shopping-store-5669296-4728239.png' }}
-                        />
+                        /> */}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View style={{ backgroundColor: '#E1B107', borderRadius: 10, marginRight: 10 }}>
                                 <IconButton

@@ -111,7 +111,7 @@ export function StackScreen() {
           } else if (route.name === "Approve") {
             iconName = focused ? "person" : "person-outline";
           }else if (route.name === "Add Store") {
-            iconName = focused ? "list" : "list-outline";
+            iconName = focused ? "store" : "store-outline";
           }
 
 

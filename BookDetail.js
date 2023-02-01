@@ -51,8 +51,8 @@ const deletBook=()=>{
                         <Text style={{ fontSize: 20, fontWeight: 'bold', paddingLeft: 10, color: 'grey' }}> {route.params.val.price} Rs</Text>
                         <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}>Total Stocks Left  {route.params.val.quantity}</Text>
                         <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Isbn: {route.params.val.isbn||'N/A'}</Text>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> condition: {route.params.val.edition}</Text>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Edition: {route.params.val.condition}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> condition: {route.params.val.condition}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Edition: {route.params.val.edition}</Text>
                         <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Description: {route.params.val.description}</Text>
 
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
